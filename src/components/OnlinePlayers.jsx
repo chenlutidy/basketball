@@ -176,8 +176,9 @@ export default function OnlinePlayers() {
               </div>
             ) : (
               onlinePlayers.map((player) => {
-                // 使用 socket ID 来判断是否是本人
-                const isMe = player.id === currentPlayer?.socketId;
+                // 通过 socket ID 或名字判断是否是本人
+                const isMe = (player.id === currentPlayer?.socketId) || 
+                             (player.name === currentPlayer?.playerName);
                 
                 return (
                   <div
