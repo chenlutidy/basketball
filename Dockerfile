@@ -1,16 +1,24 @@
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+# 生产阶段
 FROM node:18-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache python3 make g++
-
 COPY package*.json ./
+RUN npm install --production
 
-RUN npm install
-
-COPY . .
-
-RUN npm run build
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server.js ./server.js
+COPY --from=builder /app/database ./database
 
 RUN mkdir -p data && chown -R node:node /app
 
