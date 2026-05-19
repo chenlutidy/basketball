@@ -14,21 +14,9 @@ const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: (origin, callback) => {
-      // 开发环境允许所有来源
-      if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
-        return callback(null, true);
-      }
-      // 生产环境从环境变量读取
-      const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : [];
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: "*",
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: false
   }
 });
 
