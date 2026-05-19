@@ -96,26 +96,29 @@ io.on('connection', (socket) => {
   console.log(`✅ Player connected: ${socket.id}`);
 
   socket.on('player_join', (playerData) => {
-    console.log('🔍 player_join called with:', playerData.name);
+    // 同时支持 playerName 和 name 字段
+    const playerName = playerData.playerName || playerData.name;
+    console.log('🔍 player_join called with:', playerName);
     
     onlinePlayers.forEach((player, playerId) => {
-      if (player.name === playerData.name && playerId !== socket.id) {
-        console.log(`🔄 Removing old session for ${playerData.name} (${playerId})`);
+      if (player.name === playerName && playerId !== socket.id) {
+        console.log(`🔄 Removing old session for ${playerName} (${playerId})`);
         onlinePlayers.delete(playerId);
       }
     });
     
-    let dbPlayer = PlayerModel.findByName(playerData.name);
+    let dbPlayer = PlayerModel.findByName(playerName);
     console.log('📦 Found player in database:', dbPlayer ? dbPlayer.name : 'No player found');
     
     if (!dbPlayer) {
       try {
         PlayerModel.create({
           ...playerData,
+          name: playerName,
           id: socket.id
         });
         dbPlayer = PlayerModel.findById(socket.id);
-        console.log(`💾 New player saved to database: ${playerData.name}`);
+        console.log(`💾 New player saved to database: ${playerName}`);
       } catch (error) {
         console.error('Error saving player:', error);
       }
@@ -126,7 +129,7 @@ io.on('connection', (socket) => {
     
     const playerInfo = {
       id: socket.id,
-      name: playerData.name,
+      name: playerName,
       overall: dbPlayer?.overall || playerData.overall || 70,
       position: dbPlayer?.position || playerData.position || 'PG',
       online: true,
@@ -144,7 +147,7 @@ io.on('connection', (socket) => {
     }
     
     io.emit('player_list', Array.from(onlinePlayers.values()));
-    console.log(`👤 ${playerData.name} joined (${socket.id})`);
+    console.log(`👤 ${playerName} joined (${socket.id})`);
     console.log(`   Online players count: ${onlinePlayers.size}`);
   });
 
@@ -673,6 +676,7 @@ io.on('connection', (socket) => {
 
   socket.on('get_rooms', () => {
     socket.emit('room_list', Array.from(rooms.values()));
+    socket.emit('player_list', Array.from(onlinePlayers.values()));
   });
 
   socket.on('send_message', (data) => {
