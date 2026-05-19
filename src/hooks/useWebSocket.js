@@ -17,7 +17,7 @@ export function useWebSocket(playerData = null) {
 
   useEffect(() => {
     const newSocket = io(SOCKET_URL, {
-      transports: ['websocket']
+      transports: ['polling', 'websocket']
     });
 
     newSocket.on('connect', () => {

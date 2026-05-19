@@ -34,7 +34,7 @@ export function WebSocketProvider({ children, initialPlayerData = null }) {
 
   useEffect(() => {
     const newSocket = io(SOCKET_URL, {
-      transports: ['websocket'],
+      transports: ['polling', 'websocket'],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionAttempts: 5
