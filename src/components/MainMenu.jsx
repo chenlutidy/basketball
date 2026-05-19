@@ -16,7 +16,7 @@ export default function MainMenu() {
   const potentialData = POTENTIAL_RANKS.find(p => p.id === currentPlayer.potentialRank);
 
   const menuItems = [
-    { id: 'StreetBall', icon: '🏀', label: '街头篮球', desc: '挑战AI球队' },
+    { id: 'StreetBall', icon: '🏀', label: '街头2', desc: '挑战AI球队' },
     { id: 'RoomList', icon: '🏠', label: '自建房间', desc: '创建真人对战' },
     { id: 'OnlinePlayers', icon: '🌐', label: '在线对战', desc: '与玩家对战' },
     { id: 'Training', icon: '💪', label: '训练中心', desc: '提升能力' },

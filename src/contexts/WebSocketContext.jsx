@@ -3,13 +3,12 @@ import { io } from 'socket.io-client';
 import { useGameStore } from '../store/gameStore';
 import getConfig from '../config';
 
-// 使用配置文件中的域名
-const config = getConfig();
-const SOCKET_URL = config.socketUrl;
-
 const WebSocketContext = createContext(null);
 
 export function WebSocketProvider({ children, initialPlayerData = null }) {
+  // 直接硬编码使用线上域名
+  const SOCKET_URL = 'https://agile-achievement-production-3c20.up.railway.app';
+  
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
@@ -20,6 +19,7 @@ export function WebSocketProvider({ children, initialPlayerData = null }) {
   const [gameResult, setGameResult] = useState(null);
   const [challengeResult, setChallengeResult] = useState(null);
   const [friends, setFriends] = useState([]);
+  const [trainingResult, setTrainingResult] = useState(null);
   
   // 使用 ref 存储 initialPlayerData，避免 useEffect 重复执行
   const initialDataRef = useRef(null);
@@ -57,6 +57,50 @@ export function WebSocketProvider({ children, initialPlayerData = null }) {
             ...state.currentPlayer,
             socketId: newSocket.id
           } : null
+        }));
+      }
+    });
+
+    // 从后端加载玩家数据
+    newSocket.on('player_data_load', (loadedPlayer) => {
+      console.log('📥 从数据库加载玩家数据:', loadedPlayer);
+      if (loadedPlayer) {
+        // 完全用后端数据覆盖！优先使用后端数据
+        useGameStore.setState({
+          currentPlayer: {
+            ...loadedPlayer,
+            socketId: newSocket.id
+          },
+          // 跳转至主菜单，因为有数据了
+          currentScreen: 'Main'
+        });
+        console.log('✅ 已覆盖 store 数据，跳转至主菜单');
+      }
+    });
+
+    // 训练结果
+    newSocket.on('train_result', (result) => {
+      console.log('📥 训练结果:', result);
+      setTrainingResult(result);
+      if (result.success && result.updatedPlayer) {
+        useGameStore.setState(state => ({
+          currentPlayer: {
+            ...state.currentPlayer,
+            ...result.updatedPlayer
+          }
+        }));
+      }
+    });
+
+    // 休息结果
+    newSocket.on('rest_result', (result) => {
+      console.log('📥 休息结果:', result);
+      if (result.success && result.updatedPlayer) {
+        useGameStore.setState(state => ({
+          currentPlayer: {
+            ...state.currentPlayer,
+            ...result.updatedPlayer
+          }
         }));
       }
     });
@@ -248,6 +292,26 @@ export function WebSocketProvider({ children, initialPlayerData = null }) {
     setChallengeResult(null);
   }, []);
 
+  const clearTrainingResult = useCallback(() => {
+    setTrainingResult(null);
+  }, []);
+
+  // 训练函数
+  const train = useCallback((type) => {
+    if (socket) {
+      console.log('🏋️ 发送训练请求:', type);
+      socket.emit('player_train', type);
+    }
+  }, [socket]);
+
+  // 休息函数
+  const rest = useCallback(() => {
+    if (socket) {
+      console.log('😴 发送休息请求');
+      socket.emit('player_rest');
+    }
+  }, [socket]);
+
   const value = {
     socket,
     isConnected,
@@ -258,6 +322,7 @@ export function WebSocketProvider({ children, initialPlayerData = null }) {
     pendingChallenges,
     gameResult,
     challengeResult,
+    trainingResult,
     friends,
     joinServer,
     createRoom,
@@ -271,7 +336,10 @@ export function WebSocketProvider({ children, initialPlayerData = null }) {
     acceptChallenge,
     rejectChallenge,
     clearGameResult,
-    clearChallengeResult
+    clearChallengeResult,
+    clearTrainingResult,
+    train,
+    rest
   };
 
   return (

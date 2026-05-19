@@ -1,11 +1,20 @@
 import { useGameStore } from '../store/gameStore';
+import { useWebSocket } from '../contexts/WebSocketContext';
+import { useEffect } from 'react';
 
 export default function Training() {
   const currentPlayer = useGameStore(state => state.currentPlayer);
-  const train = useGameStore(state => state.train);
-  const rest = useGameStore(state => state.rest);
   const showMessagePopup = useGameStore(state => state.showMessagePopup);
   const setCurrentScreen = useGameStore(state => state.setCurrentScreen);
+  const { train, rest, trainingResult, clearTrainingResult } = useWebSocket();
+
+  // 监听训练结果
+  useEffect(() => {
+    if (trainingResult) {
+      showMessagePopup(trainingResult.message);
+      clearTrainingResult();
+    }
+  }, [trainingResult, showMessagePopup, clearTrainingResult]);
 
   const trainingTypes = [
     { id: 'Offense', icon: '🏀', name: '进攻训练', attrs: ['三分', '内线', '运球'] },
@@ -15,13 +24,11 @@ export default function Training() {
   ];
 
   const handleTrain = (type) => {
-    const result = train(type);
-    showMessagePopup(result.message);
+    train(type);
   };
 
   const handleRest = () => {
-    const result = rest();
-    showMessagePopup(result.message);
+    rest();
   };
 
   return (

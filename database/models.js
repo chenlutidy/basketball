@@ -190,7 +190,11 @@ export const PlayerModel = {
   },
 
   findByName(name) {
-    return getOne('SELECT * FROM players WHERE name = ?', [name]);
+    const player = getOne('SELECT * FROM players WHERE name = ?', [name]);
+    if (player) {
+      return this.deserializePlayer(player);
+    }
+    return null;
   },
 
   findAll() {

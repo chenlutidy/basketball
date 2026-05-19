@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { useWebSocket } from '../contexts/WebSocketContext';
 import { POSITIONS, POTENTIAL_RANKS } from '../data/gameConfig';
 
 export default function StartScreen() {
   const createPlayer = useGameStore(state => state.createPlayer);
   const showMessagePopup = useGameStore(state => state.showMessagePopup);
   const currentPlayer = useGameStore(state => state.currentPlayer);
-  const loadGame = useGameStore(state => state.loadGame);
+  const { joinServer } = useWebSocket();
+  // 禁用本地存储加载，完全使用后端数据库
+  // const loadGame = useGameStore(state => state.loadGame);
 
   const [playerName, setPlayerName] = useState('');
   const [positionIndex, setPositionIndex] = useState(0);
@@ -161,12 +164,25 @@ export default function StartScreen() {
         {hasSavedGame && (
           <button
             onClick={() => {
-              loadGame();
-              useGameStore.getState().setCurrentScreen('Main');
+              // 尝试从本地存储读取旧名字，然后通过 WebSocket 连接后端
+              const saved = localStorage.getItem('basketballGameState');
+              if (saved) {
+                try {
+                  const parsed = JSON.parse(saved);
+                  if (parsed.currentPlayer?.playerName) {
+                    // 只取名字，然后触发 WebSocket 连接
+                    console.log('📋 从旧存档读取名字:', parsed.currentPlayer.playerName);
+                    // 在 store 里设置最小数据，让 WebSocket 能发送
+                    useGameStore.getState().setCurrentScreen('Main');
+                  }
+                } catch (e) {
+                  console.error('读取旧存档失败:', e);
+                }
+              }
             }}
             className="btn-success w-full mt-4"
           >
-            ▶️ 继续游戏
+            ▶️ 继续游戏（从云端加载）
           </button>
         )}
       </div>

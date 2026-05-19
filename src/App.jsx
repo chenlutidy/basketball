@@ -26,7 +26,8 @@ function GameContent() {
 
   useEffect(() => {
     initializeGame();
-    loadGame();
+    // 禁用 localStorage 加载，完全使用后端数据库
+    // loadGame(); 
     startAutoSave();
   }, []);
 
@@ -66,14 +67,16 @@ function GameContent() {
   };
 
   const getPlayerData = () => {
-    if (!currentPlayer) return null;
+    if (!currentPlayer || !currentPlayer.playerName) return null;
     return {
+      playerName: currentPlayer.playerName,
       name: currentPlayer.playerName,
       overall: currentPlayer.overall,
-      position: currentPlayer.positionAbbr,
-      wins: currentPlayer.statistics.streetWins,
+      position: currentPlayer.position,
+      positionAbbr: currentPlayer.positionAbbr,
+      wins: currentPlayer.statistics?.streetWins || 0,
       streak: 0,
-      rank: calculateRank(currentPlayer.statistics.streetWins)
+      rank: calculateRank(currentPlayer.statistics?.streetWins || 0)
     };
   };
 

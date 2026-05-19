@@ -3,9 +3,8 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import path from 'path';
 import cors from 'cors';
-import { initDatabase, saveDatabase } from './database/init.js';
-import { PlayerModel, MatchModel, EquipmentModel, DraftModel } from './database/models.js';
-import apiRouter from './routes/api.js';
+import { loadDatabase, saveDatabase } from './database/json-db.js';
+import { PlayerModel, MatchModel, EquipmentModel, DraftModel, RoomModel } from './database/json-models.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -35,7 +34,6 @@ const io = new Server(server, {
 
 app.use(cors());
 app.use(express.json());
-app.use('/api', apiRouter);
 
 const onlinePlayers = new Map();
 const rooms = new Map();
@@ -100,7 +98,9 @@ const generateRoomId = () => {
 io.on('connection', (socket) => {
   console.log(`✅ Player connected: ${socket.id}`);
 
-  socket.on('player_join', async (playerData) => {
+  socket.on('player_join', (playerData) => {
+    console.log('🔍 player_join called with:', playerData.name);
+    
     onlinePlayers.forEach((player, playerId) => {
       if (player.name === playerData.name && playerId !== socket.id) {
         console.log(`🔄 Removing old session for ${playerData.name} (${playerId})`);
@@ -108,23 +108,23 @@ io.on('connection', (socket) => {
       }
     });
     
-    let dbPlayer = PlayerModel.findById(socket.id);
+    let dbPlayer = PlayerModel.findByName(playerData.name);
+    console.log('📦 Found player in database:', dbPlayer ? dbPlayer.name : 'No player found');
+    
     if (!dbPlayer) {
-      const existingByName = PlayerModel.findByName(playerData.name);
-      if (existingByName) {
-        dbPlayer = existingByName;
-      } else {
-        try {
-          PlayerModel.create({
-            ...playerData,
-            id: socket.id
-          });
-          dbPlayer = PlayerModel.findById(socket.id);
-          console.log(`💾 New player saved to database: ${playerData.name}`);
-        } catch (error) {
-          console.error('Error saving player:', error);
-        }
+      try {
+        PlayerModel.create({
+          ...playerData,
+          id: socket.id
+        });
+        dbPlayer = PlayerModel.findById(socket.id);
+        console.log(`💾 New player saved to database: ${playerData.name}`);
+      } catch (error) {
+        console.error('Error saving player:', error);
       }
+    } else {
+      console.log('🔄 Updating existing player socket ID:', socket.id);
+      dbPlayer = PlayerModel.update(dbPlayer.id, { id: socket.id });
     }
     
     const playerInfo = {
@@ -142,6 +142,7 @@ io.on('connection', (socket) => {
     onlinePlayers.set(socket.id, playerInfo);
     
     if (dbPlayer) {
+      console.log('📤 Sending player_data_load to client');
       socket.emit('player_data_load', dbPlayer);
     }
     
@@ -163,7 +164,10 @@ io.on('connection', (socket) => {
 
   socket.on('player_train', (trainingType) => {
     try {
+      console.log('🏋️ Training request:', trainingType);
       const player = PlayerModel.findById(socket.id);
+      console.log('📦 Player found:', player ? player.name : 'Not found');
+      
       if (!player) {
         socket.emit('train_result', { success: false, message: 'Player not found' });
         return;
@@ -199,7 +203,9 @@ io.on('connection', (socket) => {
       const total = coreAttrs.reduce((sum, attr) => sum + (player.attributes[attr] || 0), 0);
       player.overall = Math.max(0, Math.round(total / 9));
 
+      console.log('💾 Saving player after training');
       PlayerModel.saveFullPlayer(socket.id, player);
+      console.log('✅ Player saved');
       
       const attrNames = {
         speed: '速度',
@@ -1070,16 +1076,16 @@ function executeGlobalDraft() {
 
 const PORT = process.env.PORT || 3001;
 
-async function startServer() {
+function startServer() {
   try {
-    await initDatabase();
+    loadDatabase();
     console.log('✅ Database initialized');
     
     server.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📡 WebSocket ready`);
       console.log(`🌐 API available at http://localhost:${PORT}/api`);
-      console.log(`💾 Database path: ${process.env.DB_PATH || 'data/basketball.db'}`);
+      console.log(`💾 Database path: data/basketball.json`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);

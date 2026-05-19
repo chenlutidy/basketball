@@ -2,11 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { io } from 'socket.io-client';
 import getConfig from '../config';
 
-// 使用配置文件中的域名
-const config = getConfig();
-const SOCKET_URL = config.socketUrl;
-
 export function useWebSocket(playerData = null) {
+  // 直接硬编码使用线上域名
+  const SOCKET_URL = 'https://agile-achievement-production-3c20.up.railway.app';
+  
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isJoined, setIsJoined] = useState(false);

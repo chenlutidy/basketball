@@ -101,8 +101,7 @@ const initialPlayer = {
 };
 
 export const useGameStore = create(
-  persist(
-    (set, get) => ({
+  (set, get) => ({
       currentPlayer: null,
       aiTeams: [],
       friends: [],
@@ -1431,11 +1430,7 @@ export const useGameStore = create(
           badge: currentPlayer.draft.badge,
         };
       },
-    }),
-    {
-      name: 'basketball-game-storage',
-    }
-  )
+    })
 );
 
 function calculateOverall(attributes) {

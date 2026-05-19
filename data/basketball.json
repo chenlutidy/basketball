@@ -1,0 +1,197 @@
+{
+  "players": [
+    {
+      "id": "7u7HGPvCuIA8lvXqAAAD",
+      "name": "收到",
+      "playerName": "收到",
+      "overall": 10,
+      "position": "PG",
+      "positionAbbr": "PG",
+      "age": 18,
+      "height": 180,
+      "weight": 70,
+      "level": 1,
+      "exp": 0,
+      "potential": 70,
+      "potentialRank": "common",
+      "attributes": {
+        "speed": 10,
+        "jump": 10,
+        "strength": 10,
+        "threePoint": 10,
+        "inside": 10,
+        "defense": 10,
+        "dribble": 10,
+        "pass": 10,
+        "stamina": 10,
+        "rebound": 10,
+        "morale": 10,
+        "pressure": 10,
+        "block": 10,
+        "steal": 10,
+        "midRange": 10,
+        "breakThrough": 10
+      },
+      "hiddenAttributes": {
+        "clutch": 50,
+        "consistency": 50,
+        "basketballIQ": 50,
+        "workEthic": 50,
+        "leadership": 50,
+        "adaptability": 50,
+        "injuryResistance": 50,
+        "mentalToughness": 50
+      },
+      "status": {
+        "currentStamina": 100,
+        "maxStamina": 100,
+        "streetGamesToday": 0,
+        "league": 0,
+        "season": 1,
+        "gamesRemaining": 30,
+        "playoffsRound": 0
+      },
+      "economy": {
+        "gold": 400
+      },
+      "statistics": {
+        "gamesPlayed": 0,
+        "streetWins": 0,
+        "streetMVP": 0,
+        "mvpCount": 0,
+        "totalPoints": 0,
+        "totalRebounds": 0,
+        "totalAssists": 0,
+        "totalSteals": 0,
+        "totalBlocks": 0,
+        "fame": 0
+      },
+      "wins": 0,
+      "losses": 0,
+      "streak": 0,
+      "rank": "bronze",
+      "title": "",
+      "appearance": {
+        "jersey": "jersey_1",
+        "hair": "hair_1",
+        "skin": "skin_1",
+        "accessory": "acc_1"
+      },
+      "equipment": {
+        "worn": {}
+      },
+      "backpack": [],
+      "talents": [],
+      "staff": [],
+      "draft": {
+        "remainingDailyDrafts": 2,
+        "lastDraftReset": "Tue May 19 2026",
+        "appliedToday": 0,
+        "consecutiveFailures": 0,
+        "badge": null,
+        "scoutedAttributes": {}
+      },
+      "createdAt": 1779201200014,
+      "updatedAt": 1779201257808
+    },
+    {
+      "id": "Vq6YPVt9qFHQdIChAAAJ",
+      "name": "32",
+      "playerName": "32",
+      "overall": 10,
+      "position": "PG",
+      "positionAbbr": "PG",
+      "age": 18,
+      "height": 180,
+      "weight": 70,
+      "level": 1,
+      "exp": 0,
+      "potential": 70,
+      "potentialRank": "common",
+      "attributes": {
+        "speed": 10,
+        "jump": 10,
+        "strength": 10,
+        "threePoint": 10,
+        "inside": 10,
+        "defense": 10,
+        "dribble": 10,
+        "pass": 10,
+        "stamina": 10,
+        "rebound": 10,
+        "morale": 10,
+        "pressure": 10,
+        "block": 10,
+        "steal": 10,
+        "midRange": 10,
+        "breakThrough": 10
+      },
+      "hiddenAttributes": {
+        "clutch": 50,
+        "consistency": 50,
+        "basketballIQ": 50,
+        "workEthic": 50,
+        "leadership": 50,
+        "adaptability": 50,
+        "injuryResistance": 50,
+        "mentalToughness": 50
+      },
+      "status": {
+        "currentStamina": 100,
+        "maxStamina": 100,
+        "streetGamesToday": 0,
+        "league": 0,
+        "season": 1,
+        "gamesRemaining": 30,
+        "playoffsRound": 0
+      },
+      "economy": {
+        "gold": 400
+      },
+      "statistics": {
+        "gamesPlayed": 0,
+        "streetWins": 0,
+        "streetMVP": 0,
+        "mvpCount": 0,
+        "totalPoints": 0,
+        "totalRebounds": 0,
+        "totalAssists": 0,
+        "totalSteals": 0,
+        "totalBlocks": 0,
+        "fame": 0
+      },
+      "wins": 0,
+      "losses": 0,
+      "streak": 0,
+      "rank": "bronze",
+      "title": "",
+      "appearance": {
+        "jersey": "jersey_1",
+        "hair": "hair_1",
+        "skin": "skin_1",
+        "accessory": "acc_1"
+      },
+      "equipment": {
+        "worn": {}
+      },
+      "backpack": [],
+      "talents": [],
+      "staff": [],
+      "draft": {
+        "remainingDailyDrafts": 2,
+        "lastDraftReset": "Tue May 19 2026",
+        "appliedToday": 0,
+        "consecutiveFailures": 0,
+        "badge": null,
+        "scoutedAttributes": {}
+      },
+      "createdAt": 1779202115569,
+      "updatedAt": 1779202736079
+    }
+  ],
+  "matches": [],
+  "rooms": [],
+  "equipment": [],
+  "draftRecords": [],
+  "friends": []
+}
