@@ -6,8 +6,8 @@ import getConfig from '../config';
 const WebSocketContext = createContext(null);
 
 export function WebSocketProvider({ children, initialPlayerData = null }) {
-  // 本地测试 - 使用本地服务器
-  const SOCKET_URL = 'http://localhost:3001';
+  // 线上部署 - 使用 Railway
+  const SOCKET_URL = 'https://playgames.up.railway.app';
   
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);

@@ -377,7 +377,7 @@
       "updatedAt": 1779206447255
     },
     {
-      "id": "F8a6PNDmDLGwh7FIAAAg",
+      "id": "KCwdQZzCtMjiOZhnAAA4",
       "name": "232",
       "playerName": "232",
       "overall": 10,
@@ -468,11 +468,35 @@
         "scoutedAttributes": {}
       },
       "createdAt": 1779206488819,
-      "updatedAt": 1779206631886
+      "updatedAt": 1779208668090
     }
   ],
   "matches": [],
-  "rooms": [],
+  "rooms": [
+    {
+      "id": "room_1_1779208158766",
+      "name": "77",
+      "mode": "1v1",
+      "requiredPlayers": 2,
+      "status": "waiting",
+      "teamAPlayers": [
+        {
+          "id": "hIrpAXvUGEn7J3npAAAy",
+          "name": "",
+          "overall": 10,
+          "position": "PG",
+          "wins": 0,
+          "streak": 0,
+          "rank": "bronze",
+          "team": "A"
+        }
+      ],
+      "teamBPlayers": [],
+      "createdBy": "hIrpAXvUGEn7J3npAAAy",
+      "createdAt": 1779208158768,
+      "updatedAt": 1779208158768
+    }
+  ],
   "equipment": [],
   "draftRecords": [],
   "friends": []
