@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  basketball-game:
+    build: .
+    container_name: basketball-game-server
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3001}
+      - DB_PATH=/app/data/basketball.db
+    volumes:
+      - basketball-data:/app/data
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  basketball-data:
+    driver: local
+
+networks:
+  default:
+    name: basketball-network

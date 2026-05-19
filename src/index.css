@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+  color: #fff;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(243, 156, 18, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(243, 156, 18, 0.7);
+}
+
+/* 按钮动画 */
+.btn-primary {
+  @apply px-6 py-3 bg-gradient-to-r from-yellow-500 to-red-500 text-white font-bold rounded-full 
+         hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-yellow-500/30;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors;
+}
+
+.btn-sm {
+  @apply px-3 py-1 text-sm;
+}
+
+.btn-success {
+  @apply px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors;
+}
+
+.btn-danger {
+  @apply px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors;
+}
+
+/* 卡片样式 */
+.card {
+  @apply bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20;
+}
+
+/* 模态框样式 */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/70 flex items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 max-w-md w-full mx-4 
+         border border-white/20 shadow-2xl;
+}
