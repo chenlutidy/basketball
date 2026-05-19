@@ -56,11 +56,20 @@ let globalDraftState = {
   currentRound: 0,
 };
 
-app.use(express.static(path.join(process.cwd(), 'dist')));
+// 检查 dist 目录是否存在
+import fs from 'fs';
+const distPath = path.join(process.cwd(), 'dist');
+const hasDist = fs.existsSync(distPath);
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
-});
+if (hasDist) {
+  app.use(express.static(distPath));
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+  console.log('✅ 前端静态文件已加载');
+} else {
+  console.log('⚠️ 未找到 dist 目录，跳过前端静态文件服务');
+}
 
 app.get('/api', (req, res) => {
   res.json({

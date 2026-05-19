@@ -6,8 +6,8 @@ import getConfig from '../config';
 const WebSocketContext = createContext(null);
 
 export function WebSocketProvider({ children, initialPlayerData = null }) {
-  // 直接硬编码使用线上域名
-  const SOCKET_URL = 'https://agile-achievement-production-3c20.up.railway.app';
+  // 使用本地域名
+  const SOCKET_URL = 'http://localhost:3001';
   
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
